@@ -18,6 +18,7 @@ public class Empleado {
     
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Integer id;
     private Integer codigo;
     private String nombres;
     private String apellidos;
