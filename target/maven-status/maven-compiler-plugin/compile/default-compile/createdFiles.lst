@@ -1,4 +1,5 @@
 com\practicaswrest\service\EmpleadoService.class
+com\practicaswrest\TransactionConfig.class
 com\practicaswrest\entity\Empleado.class
 com\practicaswrest\controller\EmpleadoController.class
 com\practicaswrest\controller\NasaSWController.class

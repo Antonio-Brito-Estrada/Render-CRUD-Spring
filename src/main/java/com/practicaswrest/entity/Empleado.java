@@ -19,6 +19,7 @@ public class Empleado {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
+    @Column(unique = true)
     private Integer codigo;
     private String nombres;
     private String apellidos;
@@ -27,6 +28,14 @@ public class Empleado {
     private Integer edad;
     private String telefono;
     private Date fecha_nacimiento;
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
 
     public Integer getCodigo() {
         return codigo;
