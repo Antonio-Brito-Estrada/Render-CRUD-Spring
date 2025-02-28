@@ -7,7 +7,9 @@
 FROM amazoncorretto:11-alpine-jdk
 
 # Instalar PostgreSQL, herramientas necesarias y Python
-RUN apk update && apk add postgresql postgresql-contrib postgresql-client bash python3
+#RUN apk update && apk add postgresql postgresql-contrib postgresql-client bash python3
+RUN apk update && apk add postgresql16 postgresql16-contrib postgresql16-client bash python3
+
 
 # Crear los directorios de PostgreSQL si no existen
 RUN mkdir -p /run/postgresql && chown postgres:postgres /run/postgresql && chmod 775 /run/postgresql
