@@ -20,7 +20,10 @@ sleep 5
 # Crear la base de datos y el usuario si no existen
 su - postgres -c "psql -tc \"SELECT 1 FROM pg_database WHERE datname = '$DB_NAME'\" | grep -q 1 || psql -c \"CREATE DATABASE $DB_NAME;\""
 su - postgres -c "psql -tc \"SELECT 1 FROM pg_roles WHERE rolname = '$DB_USER'\" | grep -q 1 || psql -c \"CREATE USER $DB_USER WITH PASSWORD '$DB_PASSWORD';\""
+su - postgres -c "psql -c \"GRANT ALL PRIVILEGES ON SCHEMA public TO $DB_USER;\""
 su - postgres -c "psql -c \"GRANT ALL PRIVILEGES ON DATABASE $DB_NAME TO $DB_USER;\""
+su - postgres -c "psql -c \"GRANT USAGE, CREATE ON SCHEMA public TO $DB_USER;\""
+su - postgres -c "psql -c \"GRANT CREATE ON DATABASE $DB_NAME TO $DB_USER;\""
 
 # Comprobar si PostgreSQL está accesible
 echo "Comprobando conexión a la base de datos..."
