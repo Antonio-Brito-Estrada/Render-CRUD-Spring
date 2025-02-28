@@ -14,6 +14,7 @@ fi
 su - postgres -c "pg_ctl -D /var/lib/postgresql/data -l /var/lib/postgresql/data/logfile start"
 
 # Esperar unos segundos para que PostgreSQL arranque
+echo "Esperando a que PostgreSQL se inicie..."
 sleep 5
 
 # Crear la base de datos y el usuario si no existen
@@ -21,9 +22,21 @@ su - postgres -c "psql -tc \"SELECT 1 FROM pg_database WHERE datname = '$DB_NAME
 su - postgres -c "psql -tc \"SELECT 1 FROM pg_roles WHERE rolname = '$DB_USER'\" | grep -q 1 || psql -c \"CREATE USER $DB_USER WITH PASSWORD '$DB_PASSWORD';\""
 su - postgres -c "psql -c \"GRANT ALL PRIVILEGES ON DATABASE $DB_NAME TO $DB_USER;\""
 
-# Ejecutar el servicio Java
+# Comprobar si PostgreSQL está accesible
+echo "Comprobando conexión a la base de datos..."
+until psql -h localhost -U "$DB_USER" -d "$DB_NAME" -c '\q'; do
+    echo "Esperando a PostgreSQL..."
+    sleep 2
+done
+
+echo "Conexión a PostgreSQL exitosa."
+
+# Iniciar el servicio Java
 echo "Iniciando aplicación Java..."
 exec java -jar /demo.jar &  # Ejecutar Java en segundo plano
+
+# Esperar que la aplicación Java esté lista (si es necesario, ajustar el tiempo)
+sleep 10
 
 # Iniciar el servidor Python con CORS
 echo "Iniciando servidor Python con CORS..."
