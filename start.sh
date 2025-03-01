@@ -25,6 +25,21 @@ su - postgres -c "psql -c \"GRANT ALL PRIVILEGES ON DATABASE $DB_NAME TO $DB_USE
 su - postgres -c "psql -c \"GRANT USAGE, CREATE ON SCHEMA public TO $DB_USER;\""
 su - postgres -c "psql -c \"GRANT CREATE ON DATABASE $DB_NAME TO $DB_USER;\""
 
+# Otorgar permisos de SELECT, INSERT, UPDATE, DELETE sobre todas las tablas en el esquema public
+su - postgres -c "psql -c \"GRANT SELECT, INSERT, UPDATE, DELETE ON ALL TABLES IN SCHEMA public TO $DB_USER;\""
+
+# Otorgar permisos sobre las secuencias (para poder hacer insert en tablas con autoincremento)
+su - postgres -c "psql -c \"GRANT USAGE, SELECT ON ALL SEQUENCES IN SCHEMA public TO $DB_USER;\""
+
+# Otorgar permisos para crear nuevos objetos dentro del esquema public
+su - postgres -c "psql -c \"GRANT CREATE ON SCHEMA public TO $DB_USER;\""
+
+# Configurar permisos por defecto para cualquier tabla que se cree en el futuro
+su - postgres -c "psql -c \"ALTER DEFAULT PRIVILEGES IN SCHEMA public GRANT SELECT, INSERT, UPDATE, DELETE ON TABLES TO $DB_USER;\""
+
+# Configurar permisos por defecto para cualquier secuencia que se cree en el futuro
+su - postgres -c "psql -c \"ALTER DEFAULT PRIVILEGES IN SCHEMA public GRANT USAGE, SELECT ON SEQUENCES TO $DB_USER;\""
+
 # Comprobar si PostgreSQL está accesible
 echo "Comprobando conexión a la base de datos..."
 until psql -h localhost -U "$DB_USER" -d "$DB_NAME" -c '\q'; do
